@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 from transformers import Blip2Processor, Blip2ForConditionalGeneration
-from diffusers import DiffusionPipeline, LCMScheduler, DDIMScheduler, AutoencoderTiny
+from diffusers import LCMScheduler, DDIMScheduler, AutoencoderTiny
 
 import torch
 import torch.nn as nn
@@ -31,7 +31,7 @@ from typing import Tuple, List, Literal, Optional, Union
 from tqdm import tqdm
 from PIL import Image
 
-from util import gaussian_lowpass, blend, get_panorama_views, shift_to_mask_bbox_center
+from util import load_model, gaussian_lowpass, blend, get_panorama_views, shift_to_mask_bbox_center
 
 
 class StableMultiDiffusionPipeline(nn.Module):
@@ -39,7 +39,7 @@ class StableMultiDiffusionPipeline(nn.Module):
         self,
         device: torch.device,
         dtype: torch.dtype = torch.float16,
-        sd_version: Literal['1.5', '2.0', '2.1', 'xl'] = '1.5',
+        sd_version: Literal['1.5'] = '1.5',
         hf_key: Optional[str] = None,
         lora_key: Optional[str] = None,
         load_from_local: bool = False, # Turn on if you have already downloaed LoRA & Hugging Face hub is down.
@@ -127,16 +127,12 @@ class StableMultiDiffusionPipeline(nn.Module):
         lora_weight_name = None
         if self.sd_version == '1.5':
             if hf_key is not None:
-                print(f'[INFO] Using Hugging Face custom model key: {hf_key}')
+                print(f'[INFO] Using custom model key: {hf_key}')
                 model_key = hf_key
             else:
                 model_key = 'runwayml/stable-diffusion-v1-5'
             lora_key = 'latent-consistency/lcm-lora-sdv1-5'
             lora_weight_name = 'pytorch_lora_weights.safetensors'
-        # elif self.sd_version == 'xl':
-        #     model_key = 'stabilityai/stable-diffusion-xl-base-1.0'
-        #     lora_key = 'latent-consistency/lcm-lora-sdxl'
-        #     lora_weight_name = 'pytorch_lora_weights.safetensors'
         else:
             raise ValueError(f'Stable Diffusion version {self.sd_version} not supported.')
 
@@ -145,10 +141,7 @@ class StableMultiDiffusionPipeline(nn.Module):
             self.i2t_processor = Blip2Processor.from_pretrained('Salesforce/blip2-opt-2.7b')
             self.i2t_model = Blip2ForConditionalGeneration.from_pretrained('Salesforce/blip2-opt-2.7b')
 
-        try:
-            self.pipe = DiffusionPipeline.from_pretrained(model_key, variant='fp16', torch_dtype=dtype).to(self.device)
-        except:
-            self.pipe = DiffusionPipeline.from_pretrained(model_key, variant=None, torch_dtype=dtype).to(self.device)
+        self.pipe = load_model(model_key, self.sd_version, self.device, self.dtype)
         if lora_key is None:
             print(f'[INFO] LCM LoRA is not available for SD version {sd_version}. Using DDIM Scheduler instead...')
             self.pipe.scheduler = DDIMScheduler.from_config(self.pipe.scheduler.config)

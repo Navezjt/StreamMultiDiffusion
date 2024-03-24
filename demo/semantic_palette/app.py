@@ -36,7 +36,6 @@ import numpy as np
 from PIL import Image
 import torch
 
-import spaces
 import gradio as gr
 from huggingface_hub import snapshot_download
 
@@ -96,7 +95,9 @@ if opt.model is None:
         # 'Stable Diffusion V1.5': 'runwayml/stable-diffusion-v1-5',
     }
 else:
-    model_dict = {opt.model: opt.model}
+    if opt.model.endswith('.safetensors'):
+        opt.model = os.path.abspath(os.path.join('checkpoints', opt.model))
+    model_dict = {os.path.splitext(os.path.basename(opt.model))[0]: opt.model}
 
 models = {
     k: StableMultiDiffusionPipeline(device, sd_version='1.5', hf_key=v, has_i2t=False)
@@ -285,7 +286,6 @@ def import_state(state, json_text):
 
 ### Main worker
 
-@spaces.GPU
 def generate(state, *args, **kwargs):
     return models[state.model_id](*args, **kwargs)
 
@@ -436,10 +436,12 @@ for i in range(opt.max_palettes + 1):
     css = css + f"""
 .secondary#semantic-palette-{i} {{
     background-image: linear-gradient(to right, #374151 0%, #374151 71%, {opt.colors[i]} 100%);
+    color: white;
 }}
 
 .primary#semantic-palette-{i} {{
     background-image: linear-gradient(to right, #4338ca 0%, #4338ca 71%, {opt.colors[i]} 100%);
+    color: white;
 }}
 """
 
@@ -506,7 +508,7 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
         """
 <div style="display: flex; justify-content: center; align-items: center; text-align: center;">
     <div>
-        <h1>🧠 Semantic Paint 🎨</h1>
+        <h1>🧠 Semantic Palette 🎨</h1>
         <h5 style="margin: 0;">powered by</h5>
         <h3>StreamMultiDiffusion: Real-Time Interactive Generation with Region-Based Semantic Control</h3>
         <h5 style="margin: 0;">If you ❤️ our project, please visit our Github and give us a 🌟!</h5>
@@ -557,7 +559,6 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
             type='pil',
             label='Generated Result',
             elem_id='output-screen',
-            show_share_button=True,
             value=lambda: random.choice(example_images),
         )
 
@@ -649,7 +650,6 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
                         type='pil',
                         label='Semantic Drawpad',
                         elem_id='drawpad',
-                        show_share_button=True,
                     )
 
                 with gr.Column(scale=1):

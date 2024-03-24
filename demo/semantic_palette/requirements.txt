@@ -11,4 +11,3 @@ emoji
 numpy
 tqdm
 jupyterlab
-spaces
