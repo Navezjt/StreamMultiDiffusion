@@ -18,4 +18,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from model import StableMultiDiffusionPipeline, StableMultiDiffusionSDXLPipeline, StreamMultiDiffusion
+from model import (
+    StableMultiDiffusionPipeline,
+    StableMultiDiffusionSDXLPipeline,
+    StableMultiDiffusion3Pipeline,
+    StreamMultiDiffusion,
+    StreamMultiDiffusionSDXL,
+    StreamMultiDiffusion3,
+)

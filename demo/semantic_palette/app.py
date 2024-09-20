@@ -99,8 +99,9 @@ else:
         opt.model = os.path.abspath(os.path.join('checkpoints', opt.model))
     model_dict = {os.path.splitext(os.path.basename(opt.model))[0]: opt.model}
 
+dtype = torch.float32 if device == 'cpu' else torch.float16
 models = {
-    k: StableMultiDiffusionPipeline(device, sd_version='1.5', hf_key=v, has_i2t=False)
+    k: StableMultiDiffusionPipeline(device, dtype=dtype, sd_version='1.5', hf_key=v, has_i2t=False)
     for k, v in model_dict.items()
 }
 
@@ -368,16 +369,16 @@ example_root = os.path.join(root, 'examples')
 example_images = glob.glob(os.path.join(example_root, '*.png'))
 example_images = [Image.open(i) for i in example_images]
 
-with open(os.path.join(example_root, 'prompt_background_advanced.txt')) as f:
+with open(os.path.join(example_root, 'prompt_background_advanced.txt'), 'r', encoding='utf-8') as f:
     prompts_background = [l.strip() for l in f.readlines() if l.strip() != '']
 
-with open(os.path.join(example_root, 'prompt_girl.txt')) as f:
+with open(os.path.join(example_root, 'prompt_girl.txt'), 'r', encoding='utf-8') as f:
     prompts_girl = [l.strip() for l in f.readlines() if l.strip() != '']
 
-with open(os.path.join(example_root, 'prompt_boy.txt')) as f:
+with open(os.path.join(example_root, 'prompt_boy.txt'), 'r', encoding='utf-8') as f:
     prompts_boy = [l.strip() for l in f.readlines() if l.strip() != '']
 
-with open(os.path.join(example_root, 'prompt_props.txt')) as f:
+with open(os.path.join(example_root, 'prompt_props.txt'), 'r', encoding='utf-8') as f:
     prompts_props = [l.strip() for l in f.readlines() if l.strip() != '']
     prompts_props = {l.split(',')[0].strip(): ','.join(l.split(',')[1:]).strip() for l in prompts_props}
 
@@ -514,12 +515,12 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
         <h5 style="margin: 0;">If you ❤️ our project, please visit our Github and give us a 🌟!</h5>
         </br>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;">
-            <a href='https://arxiv.org/abs/2403.09055'>
-                <img src="https://img.shields.io/badge/arXiv-2403.09055-red">
-            </a>
-            &nbsp;
             <a href='https://jaerinlee.com/research/StreamMultiDiffusion'>
                 <img src='https://img.shields.io/badge/Project-Page-green' alt='Project Page'>
+            </a>
+            &nbsp;
+            <a href='https://arxiv.org/abs/2403.09055'>
+                <img src="https://img.shields.io/badge/arXiv-2403.09055-red">
             </a>
             &nbsp;
             <a href='https://github.com/ironjr/StreamMultiDiffusion'>
@@ -532,6 +533,10 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
             &nbsp;
             <a href='https://huggingface.co/papers/2403.09055'>
                 <img src='https://img.shields.io/badge/%F0%9F%A4%97%20Paper-StreamMultiDiffusion-yellow'>
+            </a>
+            &nbsp;
+            <a href='https://huggingface.co/spaces/ironjr/StreamMultiDiffusion'>
+                <img src='https://img.shields.io/badge/%F0%9F%A4%97%20Demo-StreamMultiDiffusion-yellow'>
             </a>
             &nbsp;
             <a href='https://huggingface.co/spaces/ironjr/SemanticPalette'>

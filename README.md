@@ -1,6 +1,11 @@
 <div align="center">
 
 <h1>StreamMultiDiffusion: Real-Time Interactive Generation</br>with Region-Based Semantic Control</h1>
+<h4>🔥🔥🔥 Now Supports Stable Diffusion 3 🔥🔥🔥</h4>
+
+| ![mask](./assets/fantasy_large/fantasy_large_full.png) | ![result](./assets/fantasy_large_sd3_generation.png) |
+| :----------------------------: | :----------------------------: |
+| Semantic Brush Input (1024x1024) | Generated Image with SD3 (**6.3 sec!**) |
 
 [**Jaerin Lee**](http://jaerinlee.com/) · [**Daniel Sungho Jung**](https://dqj5182.github.io/) · [**Kanggeon Lee**](https://github.com/dlrkdrjs97/) · [**Kyoung Mu Lee**](https://cv.snu.ac.kr/index.php/~kmlee/)
 
@@ -17,8 +22,10 @@
 [![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey)](https://github.com/ironjr/StreamMultiDiffusion/blob/main/LICENSE)
 [![HFPaper](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Paper-yellow)](https://huggingface.co/papers/2403.09055)
 
-[![HFDemo1](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-SD1.5-yellow)](https://huggingface.co/spaces/ironjr/SemanticPalette)
-[![HFDemo2](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-SDXL-yellow)](https://huggingface.co/spaces/ironjr/SemanticPaletteXL)
+[![HFDemoMain](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-Main-yellow)](https://huggingface.co/spaces/ironjr/StreamMultiDiffusion)
+[![HFDemo1](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-SemanticPaletteSD1.5-yellow)](https://huggingface.co/spaces/ironjr/SemanticPalette)
+[![HFDemo2](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-SemanticPaletteSDXL-yellow)](https://huggingface.co/spaces/ironjr/SemanticPaletteXL)
+[![HFDemo3](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-SemanticPaletteSD3-yellow)](https://huggingface.co/spaces/ironjr/SemanticPalette3)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/SemanticPalette-jupyter/blob/main/SemanticPalette_jupyter.ipynb)
 
 </div>
@@ -68,6 +75,7 @@ However, we have decreased the latency **from an hour to a minute**, making the 
   * [Demo Application Architecture](#demo-application-architecture)
 - [🙋 FAQ](#---faq)
   * [What is Semantic Palette Anyway?](#what-is--semantic-palette--anyway-)
+- [🚨 Notice](#---notice)
 - [🌏 Citation](#---citation)
 - [🤗 Acknowledgement](#---acknowledgement)
 - [📧 Contact](#---contact)
@@ -88,19 +96,24 @@ However, we have decreased the latency **from an hour to a minute**, making the 
 
 ---
 
-## 🚩 Updates
+## 🚩 Updates (NEW!)
 
-- 🏃 More public demos are expected!
-- 🔥 March 24, 2024: Our new demo app _Semantic Palette SDXL_ is out at [Hugging Face Space](https://huggingface.co/spaces/ironjr/SemanticPaletteXL)! Great thanks to [Cagliostro Research Lab](https://cagliostrolab.net/) for the permission of [Animagine XL 3.1](https://huggingface.co/cagliostrolab/animagine-xl-3.1) model used in the demo!
-- 🔥 March 24, 2024: We now (experimentally) support SDXL with [Lightning LoRA](https://huggingface.co/ByteDance/SDXL-Lightning) in our semantic palette demo! Streaming type with SDXL-Lighning is under development.
-- 🔥 March 23, 2024: We now support `.safetensors` type models. Please see the instructions in Usage section.
-- 🔥 March 22, 2024: Our demo app _Semantic Palette_ is now available on [Google Colab](https://colab.research.google.com/github/camenduru/SemanticPalette-jupyter/blob/main/SemanticPalette_jupyter.ipynb)! Huge thanks to [@camenduru](https://github.com/camenduru)!
-- 🔥 March 22, 2024: The app _Semantic Palette_ is now included in the repository! Run `python src/demo/semantic_palette/app.py --model "your model here"` to run the app from your local machine.
-- 🔥 March 19, 2024: Our first public demo of _semantic palette_ is out at [Hugging Face Space](https://huggingface.co/spaces/ironjr/SemanticPalette)! We would like to give our biggest thanks to the almighty Hugging Face 🤗 team for their help!
-- 🔥 March 16, 2024: Added examples and instructions for region-based generation, panorama generation, and inpainting.
-- 🔥 March 15, 2024: Added detailed instructions in this README for creators.
-- 🔥 March 14, 2024: We have released our paper, StreamMultiDiffusion on [arXiv](https://arxiv.org/abs/2403.09055).
-- 🔥 March 13, 2024: Code release!
+![demo_v2](./assets/demo_v2.gif)
+
+- 🔥 June 24, 2024: We have launched our demo of Semantic Palette for vanilla **Stable Diffusion 3** in the Hugging Face 🤗 Space [here](https://huggingface.co/spaces/ironjr/SemanticPalette3)! If you want to run this in your local, we also provided code in this repository: see [here](https://github.com/ironjr/StreamMultiDiffusion/tree/main/demo/semantic_palette_sd3). Make sure to have enough VRAM!
+- 🔥 June 22, 2024: We now support [Stable Diffusion 3](https://huggingface.co/stabilityai/stable-diffusion-3-medium) powered by [Flash Diffusion](https://huggingface.co/jasperai/flash-sd3)! Installation guide is updated for SD3. See [notebooks](https://github.com/ironjr/StreamMultiDiffusion/tree/main/notebooks) directory for the newly updated Jupyter notebook demo.
+- ✅ April 30, 2024: Real-time interactive generation demo is now published at [Hugging Face Space](https://huggingface.co/spaces/ironjr/StreamMultiDiffusion)!
+- ✅ April 23, 2024: Real-time interactive generation demo is updated to [version 2](https://github.com/ironjr/StreamMultiDiffusion/tree/main/demo/stream_v2)! We now have fully responsive interface with `gradio.ImageEditor`. Huge thanks to [@pngwn](https://github.com/pngwn) and Hugging Face 🤗 Gradio team for the [great update (4.27)](https://www.gradio.app/changelog#4-27-0)!
+- ✅ March 24, 2024: Our new demo app _Semantic Palette SDXL_ is out at [Hugging Face Space](https://huggingface.co/spaces/ironjr/SemanticPaletteXL)! Great thanks to [Cagliostro Research Lab](https://cagliostrolab.net/) for the permission of [Animagine XL 3.1](https://huggingface.co/cagliostrolab/animagine-xl-3.1) model used in the demo!
+- ✅ March 24, 2024: We now (experimentally) support SDXL with [Lightning LoRA](https://huggingface.co/ByteDance/SDXL-Lightning) in our semantic palette demo! Streaming type with SDXL-Lighning is under development.
+- ✅ March 23, 2024: We now support `.safetensors` type models. Please see the instructions in Usage section.
+- ✅ March 22, 2024: Our demo app _Semantic Palette_ is now available on [Google Colab](https://colab.research.google.com/github/camenduru/SemanticPalette-jupyter/blob/main/SemanticPalette_jupyter.ipynb)! Huge thanks to [@camenduru](https://github.com/camenduru)!
+- ✅ March 22, 2024: The app _Semantic Palette_ is now included in the repository! Run `python src/demo/semantic_palette/app.py --model "your model here"` to run the app from your local machine.
+- ✅ March 19, 2024: Our first public demo of _semantic palette_ is out at [Hugging Face Space](https://huggingface.co/spaces/ironjr/SemanticPalette)! We would like to give our biggest thanks to the almighty Hugging Face 🤗 team for their help!
+- ✅ March 16, 2024: Added examples and instructions for region-based generation, panorama generation, and inpainting.
+- ✅ March 15, 2024: Added detailed instructions in this README for creators.
+- ✅ March 14, 2024: We have released our paper, StreamMultiDiffusion on [arXiv](https://arxiv.org/abs/2403.09055).
+- ✅ March 13, 2024: Code release!
 
 ---
 
@@ -112,16 +125,26 @@ git clone https://github.com/ironjr/StreamMultiDiffusion
 pip install -r requirements.txt
 ```
 
+### For SD3 (🔥NEW!!!)
+
+We now support Stable Diffusion 3. To enable the feature, in addition to above installation code, enter the following code in your terminal.
+
+```bash
+pip install git+https://github.com/initml/diffusers.git@clement/feature/flash_sd3
+```
+
+This will allow you to use [Flash Diffusion for SD3](https://huggingface.co/jasperai/flash-sd3). For using SD3 pipelines, please refer to newly updated Jupyter demos in the [notebooks](https://github.com/ironjr/StreamMultiDiffusion/tree/main/notebooks) directory.
+
 ## ⚡ Usage
 
 ### Overview
 
 StreamMultiDiffusion is served in serveral different forms.
 
-1. The main GUI demo powered by Gradio is available at `demo/stream/app.py`. Just type the below line in your command prompt and open `https://localhost:8000` with any web browser will launch the app.
+1. The main GUI demo powered by Gradio is available at `demo/stream_v2/app.py`. Just type the below line in your command prompt and open `https://localhost:8000` with any web browser will launch the app.
 
 ```bash
-cd demo/stream
+cd demo/stream_v2
 python app.py --model "your stable diffusion 1.5 checkpoint" --height 512 --width 512 --port 8000
 ```
 
@@ -144,6 +167,123 @@ python app.py --model "your stable diffusion 1.5 checkpoint" --height 512 --widt
 5. As a python library by importing the `model` in `src`. For detailed examples and interfaces, please see the Usage section below.
 
 
+---
+
+### Demo Application (StreamMultiDiffusion)
+
+<p align="center">
+  <img src="./assets/demo_v2.gif" width=90%>
+</p>
+
+#### Features
+
+- Drawing with _semantic palette_ with streaming interface.
+- Fully web-based GUI, powered by Gradio.
+- Supports any Stable Diffusion v1.5 checkpoint with option `--model`.
+- Supports any-sized canvas (if your VRAM permits!) with opetion `--height`, `--width`.
+- Supports 8 semantic brushes.
+
+#### Run
+
+```bash
+cd src/demo/stream_v2
+python app.py [other options]
+```
+
+#### Run with `.safetensors`
+
+We now support `.safetensors` type local models.
+You can run the demo app with your favorite checkpoint models as follows:
+1. Save `<your model>.safetensors` or a [symbolic link](https://mangohost.net/blog/what-is-the-linux-equivalent-to-symbolic-links-in-windows/) to the actual file to `demo/stream/checkpoints`.
+2. Run the demo with your model loaded with `python app.py --model <your model>.safetensors`
+
+Done!
+
+#### Other options
+
+- `--model`: Optional. The path to your custom SDv1.5 checkpoint. Both Hugging Face model repository / local safetensor types are supported. e.g., `--model "KBlueLeaf/kohaku-v2.1"` or `--model "realcartoonPixar_v6.safetensors"` Please note that safetensors models should reside in `src/demo/stream/checkpoints`!
+- `--height` (`-H`): Optional. Height of the canvas. Default: 768.
+- `--width` (`-W`): Optional. Width of the canvas. Default: 1920.
+- `--display_col`: Optional. Number of displays in a row. Useful for buffering the old frames. Default: 2.
+- `--display_row`: Optional. Number of displays in a column. Useful for buffering the old frames. Default: 2.
+- `--bootstrap_steps`: Optional. The number of bootstrapping steps that separate each of the different semantic regions. Best when 1-3. Larger value means better separation, but less harmony within the image. Default: 1.
+- `--seed`: Optional. The default seed of the application. Almost never needed since you can modify the seed value in GUI. Default: 2024.
+- `--device`: Optional. The number of GPU card (probably 0-7) you want to run the model. Only for multi-GPU servers. Default: 0.
+- `--port`: Optional. The front-end port of the application. If the port is 8000, you can access your runtime through `https://localhost:8000` from any web browser. Default: 8000.
+
+
+#### Instructions
+
+| ![usage1](./assets/instruction1.png) | ![usage2](./assets/instruction2.png) |
+| :----------------------------: | :----------------------------: |
+| Upoad a background image | Type some text prompts |
+| ![usage3](./assets/instruction3.png) | ![usage4](./assets/instruction4.png) |
+| Draw | Press the play button and enjoy 🤩 |
+
+1. (top-left) **Upload a background image.** You can start with a white background image, as well as any other images from your phone camera or other AI-generated artworks. You can also entirely cover the image editor with specific semantic brush to draw background image simultaneously from the text prompt.
+
+2. (top-right) **Type some text prompts.** Click each semantic brush on the semantic palette on the left of the screen and type in text prompts in the interface below. This will create a new semantic brush for you.
+
+3. (bottom-left) **Draw.** Select appropriate layer (*important*) that matches the order of the semantic palette. That is, ***Layer n*** corresponds to ***Prompt n***. I am not perfectly satisfied with the interface of the drawing interface. Importing professional Javascript-based online drawing tools instead of the default `gr.ImageEditor` will enable more responsive interface. We have released our code with MIT License, so please feel free to fork this repo and build a better user interface upon it. 😁
+
+4. (bottom-right) **Press the play button and enjoy!** The buttons literally mean 'toggle stream/run single/run batch (4)'.
+
+---
+
+### Demo Application (Semantic Palette)
+
+<div>
+
+<p align="center">
+  <img src="./assets/demo_semantic_draw_large.gif" width=90%>
+</p>
+
+</div>
+
+Our first demo _[Semantic Palette](https://huggingface.co/spaces/ironjr/SemanticPalette)_ is now available in your local machine.
+
+#### Features
+
+- Fully web-based GUI, powered by Gradio.
+- Supports any Stable Diffusion v1.5 checkpoint with option `--model`.
+- Supports any-sized canvas (if your VRAM permits!) with opetion `--height`, `--width`.
+- Supports 5 semantic brushes. If you want more brushes, you can use our python interface directly. Please see our Jupyter notebook references in the `notebooks` directory.
+
+#### Run
+
+```bash
+cd src/demo/semantic_palette
+python app.py [other options]
+```
+
+#### Run with `.safetensors`
+
+We now support `.safetensors` type local models.
+You can run the demo app with your favorite checkpoint models as follows:
+1. Save `<your model>.safetensors` or a [symbolic link](https://mangohost.net/blog/what-is-the-linux-equivalent-to-symbolic-links-in-windows/) to the actual file to `demo/semantic_palette/checkpoints`.
+2. Run the demo with your model loaded with `python app.py --model <your model>.safetensors`
+
+Done!
+
+#### Other options
+
+- `--model`: Optional. The path to your custom SDv1.5 checkpoint. Both Hugging Face model repository / local safetensor types are supported. e.g., `--model "KBlueLeaf/kohaku-v2.1"` or `--model "realcartoonPixar_v6.safetensors"` Please note that safetensors models should reside in `src/demo/semantic_palette/checkpoints`!
+- `--height` (`-H`): Optional. Height of the canvas. Default: 768.
+- `--width` (`-W`): Optional. Width of the canvas. Default: 1920.
+- `--bootstrap_steps`: Optional. The number of bootstrapping steps that separate each of the different semantic regions. Best when 1-3. Larger value means better separation, but less harmony within the image. Default: 1.
+- `--seed`: Optional. The default seed of the application. Almost never needed since you can modify the seed value in GUI. Default: -1 (random).
+- `--device`: Optional. The number of GPU card (probably 0-7) you want to run the model. Only for multi-GPU servers. Default: 0.
+- `--port`: Optional. The front-end port of the application. If the port is 8000, you can access your runtime through `https://localhost:8000` from any web browser. Default: 8000.
+
+#### Instructions
+
+Instructions on how to use the app to create your images: Please see this twitter [thread](https://twitter.com/_ironjr_/status/1770245714591064066).
+
+#### Tips
+
+I have provided more tips in using the app in another twitter [thread](https://twitter.com/_ironjr_/status/1770716860948025539).
+
+---
 
 ### Basic Usage (Python)
 
@@ -357,7 +497,105 @@ image.save('my_beautiful_creation.png')
 
 ---
 
-### (🔥NEW!) Region-Based Multi-Text-to-Image Generation with Custom SDXL
+### (🔥NEW!!!) Region-Based Multi-Text-to-Image Generation with Stable Diffusion 3
+
+We support arbitrary-sized image generation from arbitrary number of prompt-mask pairs using custom SDXL models.
+This is powered by [SDXL-Lightning LoRA](https://huggingface.co/ByteDance/SDXL-Lightning) and our stabilization trick for MultiDiffusion in conjunction with Lightning-type sampling algorithm.
+
+**Result:**
+
+| ![mask](./assets/fantasy_large/fantasy_large_full.png) | ![result](./assets/fantasy_large_sd3_generation.png) |
+| :----------------------------: | :----------------------------: |
+| Semantic Brush Input | Generated Image (**6.3 sec!**) |
+
+<p align="center">
+    1024x1024 image generated with <a href="https://huggingface.co/stabilityai/stable-diffusion-3-medium">Stable Diffusion 3</a> accelerated by <a href="https://huggingface.co/jasperai/flash-sd3">Flash Diffusion</a>.
+</p>
+
+**Code:**
+
+```python
+import torch
+from model import StableMultiDiffusion3Pipeline
+from util import seed_everything
+from prompt_util import print_prompts, preprocess_prompts
+
+# The following packages are imported only for loading the images.
+import torchvision.transforms as T
+import requests
+from functools import reduce
+from io import BytesIO
+from PIL import Image
+
+
+seed = 1
+device = 0
+
+# Load the module.
+seed_everything(seed)
+device = torch.device(f'cuda:{device}')
+smd = StableMultiDiffusionSDXLPipeline(
+    device,
+    hf_key='cagliostrolab/animagine-xl-3.1',
+    has_i2t=False,
+)
+
+# Load prompts.
+prompts = [
+    # Background prompt.
+    'blue sky with large words "Stream" on it',
+    # Foreground prompts.
+    'a photo of the dolomites, masterpiece, absurd quality, background, no humans',
+    'a photo of Gandalf the Gray staring at the viewer',
+]
+negative_prompts = [
+    '1girl, 1boy, humans, humans, humans',
+    '1girl, 1boy, humans, humans, humans',
+    '',
+]
+negative_prompt_prefix = 'worst quality, bad quality, normal quality, cropped, framed'
+negative_prompts = [negative_prompt_prefix + ', ' + p for p in negative_prompts]
+
+# Preprocess prompts for better results.
+prompts, negative_prompts = preprocess_prompts(
+    prompts,
+    negative_prompts,
+    style_name='(None)',
+    quality_name='Standard v3.1',
+)
+
+# Load masks.
+masks = []
+for i in range(1, 3):
+    url = f'https://raw.githubusercontent.com/ironjr/StreamMultiDiffusion/main/assets/fantasy_large/fantasy_large_{i}.png'
+    response = requests.get(url)
+    mask = Image.open(BytesIO(response.content)).convert('RGBA')
+    mask = (T.ToTensor()(mask)[-1:] > 0.5).float()
+    masks.append(mask)
+# In this example, background is simply set as non-marked regions.
+background = reduce(torch.logical_and, [m == 0 for m in masks])
+masks = torch.stack([background] + masks, dim=0).float()
+
+height, width = masks.shape[-2:] # (1024, 1024) in this example.
+
+# Sample an image.
+image = smd(
+    prompts,
+    negative_prompts,
+    masks=masks,
+    mask_strengths=1,
+    mask_stds=0,
+    height=height,
+    width=width,
+    bootstrap_steps=2,
+    guidance_scale=0,
+)
+image.save('my_beautiful_creation.png')
+```
+
+---
+
+### Region-Based Multi-Text-to-Image Generation with Custom SDXL
 
 We support arbitrary-sized image generation from arbitrary number of prompt-mask pairs using custom SDXL models.
 This is powered by [SDXL-Lightning LoRA](https://huggingface.co/ByteDance/SDXL-Lightning) and our stabilization trick for MultiDiffusion in conjunction with Lightning-type sampling algorithm.
@@ -704,128 +942,6 @@ image = smd.sample('A photo of the dolomites')
 image.save('my_creation.png')
 ```
 
----
-
-### Demo Application (StreamMultiDiffusion)
-
-<p align="center">
-  <img src="./assets/demo.gif" width=90%>
-</p>
-
-#### Features
-
-- Drawing with _semantic palette_ with streaming interface.
-- Fully web-based GUI, powered by Gradio.
-- Supports any Stable Diffusion v1.5 checkpoint with option `--model`.
-- Supports any-sized canvas (if your VRAM permits!) with opetion `--height`, `--width`.
-- Supports 8 semantic brushes.
-
-#### Run
-
-```bash
-cd src/demo/stream
-python app.py [other options]
-```
-
-#### Run with `.safetensors`
-
-We now support `.safetensors` type local models.
-You can run the demo app with your favorite checkpoint models as follows:
-1. Save `<your model>.safetensors` or a [symbolic link](https://mangohost.net/blog/what-is-the-linux-equivalent-to-symbolic-links-in-windows/) to the actual file to `demo/stream/checkpoints`.
-2. Run the demo with your model loaded with `python app.py --model <your model>.safetensors`
-
-Done!
-
-#### Other options
-
-- `--model`: Optional. The path to your custom SDv1.5 checkpoint. Both Hugging Face model repository / local safetensor types are supported. e.g., `--model "KBlueLeaf/kohaku-v2.1"` or `--model "realcartoonPixar_v6.safetensors"` Please note that safetensors models should reside in `src/demo/stream/checkpoints`!
-- `--height` (`-H`): Optional. Height of the canvas. Default: 768.
-- `--width` (`-W`): Optional. Width of the canvas. Default: 1920.
-- `--display_col`: Optional. Number of displays in a row. Useful for buffering the old frames. Default: 2.
-- `--display_row`: Optional. Number of displays in a column. Useful for buffering the old frames. Default: 2.
-- `--bootstrap_steps`: Optional. The number of bootstrapping steps that separate each of the different semantic regions. Best when 1-3. Larger value means better separation, but less harmony within the image. Default: 1.
-- `--seed`: Optional. The default seed of the application. Almost never needed since you can modify the seed value in GUI. Default: 2024.
-- `--device`: Optional. The number of GPU card (probably 0-7) you want to run the model. Only for multi-GPU servers. Default: 0.
-- `--port`: Optional. The front-end port of the application. If the port is 8000, you can access your runtime through `https://localhost:8000` from any web browser. Default: 8000.
-
-
-#### Instructions
-
-| ![usage1](./assets/instruction1.png) | ![usage2](./assets/instruction2.png) |
-| :----------------------------: | :----------------------------: |
-| Upoad a background image | Type some text prompts |
-| ![usage3](./assets/instruction3.png) | ![usage4](./assets/instruction4.png) |
-| Draw | Press the play button and enjoy 🤩 |
-
-1. (top-left) **Upload a background image.** You can start with a white background image, as well as any other images from your phone camera or other AI-generated artworks. You can also entirely cover the image editor with specific semantic brush to draw background image simultaneously from the text prompt.
-
-2. (top-right) **Type some text prompts.** Click each semantic brush on the semantic palette on the left of the screen and type in text prompts in the interface below. This will create a new semantic brush for you.
-
-3. (bottom-left) **Draw.** Select appropriate layer (*important*) that matches the order of the semantic palette. That is, ***Layer n*** corresponds to ***Prompt n***. I am not perfectly satisfied with the interface of the drawing interface. Importing professional Javascript-based online drawing tools instead of the default `gr.ImageEditor` will enable more responsive interface. We have released our code with MIT License, so please feel free to fork this repo and build a better user interface upon it. 😁
-
-4. (bottom-right) **Press the play button and enjoy!** The buttons literally mean 'toggle stream/run single/run batch (4)'.
-
----
-
-### Demo Application (Semantic Palette)
-
-<div>
-
-<p align="center">
-  <img src="./assets/demo_semantic_draw_large.gif" width=90%>
-</p>
-
-</div>
-
-Our first demo _[Semantic Palette](https://huggingface.co/spaces/ironjr/SemanticPalette)_ is now available in your local machine.
-
-#### Features
-
-- Fully web-based GUI, powered by Gradio.
-- Supports any Stable Diffusion v1.5 checkpoint with option `--model`.
-- Supports any-sized canvas (if your VRAM permits!) with opetion `--height`, `--width`.
-- Supports 5 semantic brushes. If you want more brushes, you can use our python interface directly. Please see our Jupyter notebook references in the `notebooks` directory.
-
-#### Run
-
-```bash
-cd src/demo/semantic_palette
-python app.py [other options]
-```
-
-#### Run with `.safetensors`
-
-We now support `.safetensors` type local models.
-You can run the demo app with your favorite checkpoint models as follows:
-1. Save `<your model>.safetensors` or a [symbolic link](https://mangohost.net/blog/what-is-the-linux-equivalent-to-symbolic-links-in-windows/) to the actual file to `demo/semantic_palette/checkpoints`.
-2. Run the demo with your model loaded with `python app.py --model <your model>.safetensors`
-
-Done!
-
-#### Other options
-
-- `--model`: Optional. The path to your custom SDv1.5 checkpoint. Both Hugging Face model repository / local safetensor types are supported. e.g., `--model "KBlueLeaf/kohaku-v2.1"` or `--model "realcartoonPixar_v6.safetensors"` Please note that safetensors models should reside in `src/demo/semantic_palette/checkpoints`!
-- `--height` (`-H`): Optional. Height of the canvas. Default: 768.
-- `--width` (`-W`): Optional. Width of the canvas. Default: 1920.
-- `--bootstrap_steps`: Optional. The number of bootstrapping steps that separate each of the different semantic regions. Best when 1-3. Larger value means better separation, but less harmony within the image. Default: 1.
-- `--seed`: Optional. The default seed of the application. Almost never needed since you can modify the seed value in GUI. Default: -1 (random).
-- `--device`: Optional. The number of GPU card (probably 0-7) you want to run the model. Only for multi-GPU servers. Default: 0.
-- `--port`: Optional. The front-end port of the application. If the port is 8000, you can access your runtime through `https://localhost:8000` from any web browser. Default: 8000.
-
-#### Instructions
-
-Instructions on how to use the app to create your images: Please see this twitter [thread](https://twitter.com/_ironjr_/status/1770245714591064066).
-
-#### Tips
-
-I have provided more tips in using the app in another twitter [thread](https://twitter.com/_ironjr_/status/1770716860948025539).
-
----
-
-### Basic Usage (CLI)
-
-Coming Soon!
-
 
 ---
 
@@ -904,6 +1020,16 @@ Please cite us if you find our project useful!
     year={2024}
 }
 ```
+
+## 🚨 Notice
+
+Please note that we do not host separate pages for this project other than our [official project page](https://jaerinlee.com/research/streammultidiffusion) and [hugging face](https://huggingface.co/spaces/ironjr/SemanticPalette) [space demos](https://huggingface.co/spaces/ironjr/SemanticPaletteXL).
+For example [https://streammultidiffusion.net](https://streammultidiffusion.net/) is not related to us!
+(By the way thanks for hosting)
+
+We do welcome anyone who wants to use our framework/code/app for any personal or commercial purpose (we have opened the code here for free with MIT License).
+However, **we'd be much happier if you cite us in any format in your application**.
+We are very open to discussion, so if you find any issue with this project, including commercialization of the project, please contact [us](https://twitter.com/_ironjr_) or post an issue.
 
 
 ## 🤗 Acknowledgement

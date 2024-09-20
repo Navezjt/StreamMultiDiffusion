@@ -64,6 +64,7 @@ class StreamMultiDiffusion(nn.Module):
         preprocess_mask_cover_alpha: float = 0.3, # TODO
         prompt_queue_capacity: int = 256,
         mask_type: Literal['discrete', 'semi-continuous', 'continuous'] = 'continuous',
+        use_xformers: bool = True,
     ) -> None:
         super().__init__()
 
@@ -148,16 +149,15 @@ class StreamMultiDiffusion(nn.Module):
             lora_scale=1.0,
             safe_fusing=False,
         )
-        self.pipe.enable_xformers_memory_efficient_attention()
+        if use_xformers:
+            self.pipe.enable_xformers_memory_efficient_attention()
 
         self.vae = (
             AutoencoderTiny.from_pretrained('madebyollin/taesd').to(device=self.device, dtype=self.dtype)
             if use_tiny_vae else self.pipe.vae
         )
         # self.tokenizer = self.pipe.tokenizer
-        # self.text_encoder = self.pipe.text_encoder
-        # self.tokenizer_2 = self.pipe.tokenizer_2 if hasattr(self.pipe, 'tokenizer_2') else None
-        # self.text_encoder_2 = self.pipe.text_encoder_2 if hasattr(self.pipe, 'text_encoder_2') else None
+        self.text_encoder = self.pipe.text_encoder
         self.unet = self.pipe.unet
         self.vae_scale_factor = self.pipe.vae_scale_factor
 
@@ -709,6 +709,51 @@ class StreamMultiDiffusion(nn.Module):
         self.ready_checklist['flushed'] = False
 
     @torch.no_grad()
+    def update_masks(
+        self,
+        masks: Optional[Union[torch.Tensor, Image.Image, List[Image.Image]]] = None,
+        mask_strengths: Optional[Union[torch.Tensor, float, List[float]]] = None,
+        mask_stds: Optional[Union[torch.Tensor, float, List[float]]] = None,
+    ) -> None:
+        if not self.ready_checklist['background_registered']:
+            print('[WARNING]  Register background image first! Request ignored.')
+            return
+
+        ### Register new masks
+
+        if isinstance(masks, Image.Image):
+            masks = [masks]
+        p = self.num_layers
+        n = len(masks) if masks is not None else 0
+
+        # Modificiation.
+        masks, mask_strengths, mask_stds, original_masks = self.process_mask(masks, mask_strengths, mask_stds)
+
+        self.counts = masks.sum(dim=0)  # (T, 1, h, w)
+        self.bg_mask = (1 - self.counts).clip_(0, 1)  # (T, 1, h, w)
+        self.masks = masks  # (p, T, 1, h, w)
+        self.mask_strengths = mask_strengths  # (p,)
+        self.mask_stds = mask_stds  # (p,)
+        self.original_masks = original_masks  # (p, 1, h, w)
+
+        if p > n:
+            # Add more masks: counts and bg_masks are not changed, but only masks are changed.
+            self.masks = torch.cat((
+                self.masks,
+                torch.zeros(
+                    (p - n, self.batch_size, 1, self.latent_height, self.latent_width),
+                    dtype=self.dtype,
+                    device=self.device,
+                ),
+            ), dim=0)
+            print(f'[WARNING]  Detected more prompts ({p}) than masks ({n}). '
+                  'Automatically adds blank masks for the additional prompts.')
+        elif p < n:
+            # Warns user to add more prompts.
+            print(f'[WARNING]  Detected more masks ({n}) than prompts ({p}). '
+                  'Additional masks are ignored until more prompts are provided.')
+
+    @torch.no_grad()
     def update_single_layer(
         self,
         idx: Optional[int] = None,
@@ -892,7 +937,7 @@ class StreamMultiDiffusion(nn.Module):
             )
             strength = torch.as_tensor([self.default_mask_strength], dtype=self.dtype, device=self.device)
             std = torch.as_tensor([self.default_mask_std], dtype=self.dtype, device=self.device)
-            original_mask = torch.zeros((1, 1, self.latent_height, self.latent_width), dtype=self.dtype)
+            original_mask = torch.zeros((1, 1, self.height, self.width), dtype=self.dtype, device=self.device)
 
         elif mask_std is not None or mask_strength is not None:
             # No given mask & edit mode & given std / str -> replace existing mask with given std / str.
